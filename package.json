@@ -1,6 +1,6 @@
 {
   "name": "dsh-live-token-stats",
-  "version": "0.4.3",
+  "version": "0.4.4-beta.1",
   "description": "DSH Web 插件：基于 DeepSeek 官方 BPE 分词表，在 composer 下方实时渲染 token 状态带，显示流式 TPS、输出 token 与首字延迟，并对比上次 step 的估算与实际偏差；纯插件自包含，不改 DSH 源码",
   "keywords": [
     "deepseek-harness",
@@ -13,7 +13,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/better-er/dsh-live-token-stats.git"
+    "url": "git+https://github.com/drscrewdriver/dsh-live-token-stats.git"
+  },
+  "homepage": "https://github.com/drscrewdriver/dsh-live-token-stats#readme",
+  "bugs": {
+    "url": "https://github.com/drscrewdriver/dsh-live-token-stats/issues"
   },
   "type": "module",
   "main": "lib/index.js",
@@ -43,7 +47,6 @@
   },
   "scripts": {
     "build": "tsc -b && tsdown",
-    "prepare": "tsdown",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run"
   },

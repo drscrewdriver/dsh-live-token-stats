@@ -44,17 +44,21 @@ DeepSeek Harness 经常会看起来像卡住了，只显示**深度潜水中**�
 
 ## 安装
 
-**从 GitHub 安装**：源码在 `src/`，`lib/` 不入仓库，安装时 npm 会触发 `prepare` 脚本现场构建。
+**从 GitHub 安装（本 fork 推荐）**：本 fork 的 `lib/` **随仓库提交**，且已去掉 `prepare` 脚本，因此安装端零构建 —— 不需要 pnpm 的 `allowBuilds` 白名单，也不会为跑构建而拉取整棵 devDependency 树（实测 3741 个文件 / 83.8 MB）。
 
 ```powershell
-dsh plugin --profile web add github:better-er/dsh-live-token-stats
+dsh plugin --profile web add github:drscrewdriver/dsh-live-token-stats#fix/lossless-json-state-boundary
 ```
+
+上游 `better-er/dsh-live-token-stats` 的做法相反：`lib/` 不入仓库，安装时由 `prepare` 现场构建，在 pnpm 默认拦截构建脚本的环境下会报 `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED`，需要往 `pnpm-workspace.yaml` 的 `allowBuilds` 里加一条**含 codeload 地址与 commit SHA** 的键，且每次推新 commit 都要改一次。本 fork 改提交产物就是为了消掉这个循环。
 
 **从 npm 安装**：包内已含构建产物 `lib/index.js` 与 `lib/client.js`，安装时不再构建。
 
 ```powershell
 dsh plugin --profile web add dsh-live-token-stats
 ```
+
+> 本 fork 尚未发布 npm。npm 上的 `dsh-live-token-stats@0.4.3` 是**上游版本，含本文档所述缺陷**；本 fork 的修复版是 `0.4.4-beta.1`，只走 git 安装。装完可用 `lib/index.js` 里是否含 `omitUndefined` 判断装的是哪一个（两者版本号在 npm 上同为 0.4.3，光看版本号会误判）。
 
 两种方式装完都会自动挂载，重启 DSH web 后启用，无需手工编辑任何文件。
 
@@ -93,7 +97,7 @@ dsh plugin --profile web remove dsh-live-token-stats
 - 是**标准形态的 dsh 客户端加主机双半身插件**，host 提供数据服务，`./client` 提供 UI。
 - 同时声明了 `dsh.bundle`，因此也是一个**自挂载的 bundle 层插件**：用 `dsh plugin --profile <name> add` 安装后，会被自动识别为 profile layer 并挂载，无需手工写组合 entry。
 - 纯插件自包含，不改 DSH 源码。
-- 构建：`pnpm install` 后依次执行 `pnpm typecheck`、`pnpm test`、`pnpm build`；源码在 `src/`，发布产物在 `lib/`，由 tsdown 构建，运行时加载的是 lib。
+- 构建：`pnpm install` 后依次执行 `pnpm typecheck`、`pnpm test`、`pnpm build`；源码在 `src/`，发布产物在 `lib/`，由 tsdown 构建，运行时加载的是 lib。**改完 `src/` 必须重新 `pnpm build` 并连同 `lib/` 一起提交**——本 fork 已去掉 `prepare`，仓库里的 `lib/` 不会在安装时自动重建。
 
 ## 开发、CI 与发布
 

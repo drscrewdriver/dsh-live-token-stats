@@ -1,7 +1,11 @@
 # 依赖与产物
 node_modules/
-lib/
 dist/
+# lib/ 在本 fork 里随仓库提交，故意不忽略：
+# 从 git 安装时 pnpm 会拦截依赖的构建脚本（ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED），
+# 而放行键里含 codeload 地址与 commit SHA，每推一次就要改一次。
+# 提交构建产物并去掉 prepare 后，安装端零构建、无需 allowBuilds 白名单。
+# 改完 src 务必先 pnpm build 再提交，否则仓库里的 lib/ 会过期。
 
 # 内部私有文档，不对外不跟踪
 .private/

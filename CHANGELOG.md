@@ -2,7 +2,7 @@
 
 本文件记录本 fork 的变更。上游 `better-er/dsh-live-token-stats` 的发布节奏以提交信息为准，本文件从本 fork 开始维护。
 
-## [未发布] 0.4.4（修复投影无损 JSON 边界）
+## [0.4.4-beta.1] 修复投影无损 JSON 边界 · 改为提交构建产物
 
 ### Fixed
 
@@ -12,6 +12,7 @@
   2. `session/fork` 的 create-publish 整体回滚 → 点 fork 无任何反应（客户端侧又被 `.catch(() => {})` 吃掉）；
   3. 投影缓存按整条记录写、不做字段级降级 → 缓存停在旧 seq，每次打开都从旧状态重算。
   会话内容本身仍可阅读（冷读走 JSON 序列化会自然丢弃 `undefined` 值键），所以现象是「能看见内容但不能接续使用」。
+- **改走 git 安装不再被 pnpm 拦构建**：去掉 `prepare` 脚本并随仓库提交 `lib/`。原来从 git 安装时 pnpm 报 `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED`，放行需要往 `pnpm-workspace.yaml` 的 `allowBuilds` 加一条含 codeload 地址与 commit SHA 的键，且**每推一次 commit 就失效一次**；同时为跑构建还要拉整棵 devDependency 树（实测 3741 文件 / 83.8 MB）。现在安装端零构建、免白名单。
 
 ### Added
 
@@ -25,6 +26,9 @@
 
 - `src/projection.ts`：结算统一走 `settleStep()`，`activeStepView()` 出口再过一次无损边界。
 - `src/live-stream.ts`：`debug` 开关同时打开投影无损自检。
+- `package.json`：`repository` / `homepage` / `bugs` 从上游 `better-er/dsh-live-token-stats` 改为本 fork `drscrewdriver/dsh-live-token-stats`（此前装上去后任何读该字段的工具都会把人导去上游）。
+- `.gitignore`：不再忽略 `lib/`，构建产物随仓库提交。
+- 版本 `0.4.3` → `0.4.4-beta.1`：与 npm 上那个含缺陷的同号 0.4.3 区分开。
 
 ### Notes
 
