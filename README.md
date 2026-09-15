@@ -47,7 +47,7 @@ DeepSeek Harness 经常会看起来像卡住了，只显示**深度潜水中**�
 **从 GitHub 安装（本 fork 推荐）**：本 fork 的 `lib/` **随仓库提交**，且已去掉 `prepare` 脚本，因此安装端零构建 —— 不需要 pnpm 的 `allowBuilds` 白名单，也不会为跑构建而拉取整棵 devDependency 树（实测 3741 个文件 / 83.8 MB）。
 
 ```powershell
-dsh plugin --profile web add github:drscrewdriver/dsh-live-token-stats#fix/lossless-json-state-boundary
+dsh plugin --profile web add github:drscrewdriver/dsh-live-token-stats
 ```
 
 上游 `better-er/dsh-live-token-stats` 的做法相反：`lib/` 不入仓库，安装时由 `prepare` 现场构建，在 pnpm 默认拦截构建脚本的环境下会报 `ERR_PNPM_GIT_DEP_PREPARE_NOT_ALLOWED`，需要往 `pnpm-workspace.yaml` 的 `allowBuilds` 里加一条**含 codeload 地址与 commit SHA** 的键，且每次推新 commit 都要改一次。本 fork 改提交产物就是为了消掉这个循环。
@@ -101,9 +101,9 @@ dsh plugin --profile web remove dsh-live-token-stats
 
 ## 开发、CI 与发布
 
-- 仓库托管于 GitHub，主分支 `master`。所有改动经 **PR** 合入 `master`，`master` 建议开启分支保护，拒绝直接 push 与 force push。
-- **CI**：`.github/workflows/ci.yml` 在 `master` 的 push 与所有 PR 上自动执行 `typecheck → test → build`，全绿是合并门槛。
-- **CD**：`.github/workflows/release.yml` 在推送 `vX.Y.Z` tag 如 `v0.3.0` 时自动发布——凭 tag 号更新 `package.json` 版本并回写 master、构建、发布到 npm、并生成 GitHub Release 草稿人工确认。npm 发布走 Trusted Publishing，需先在 npm 侧把此仓库的 Actions 绑定到对应包，无需 `NPM_TOKEN` secret。
+- 仓库托管于 GitHub，主分支 `main`。所有改动经 **PR** 合入 `main`，`main` 建议开启分支保护，拒绝直接 push 与 force push。
+- **CI**：`.github/workflows/ci.yml` 在 `main` 的 push 与所有 PR 上自动执行 `typecheck → test → build`，全绿是合并门槛。
+- **CD**：`.github/workflows/release.yml` 在推送 `vX.Y.Z` tag 如 `v0.3.0` 时自动发布——凭 tag 号更新 `package.json` 版本并回写 `main`、构建、发布到 npm、并生成 GitHub Release 草稿人工确认。npm 发布走 Trusted Publishing，需先在 npm 侧把此仓库的 Actions 绑定到对应包，无需 `NPM_TOKEN` secret。
 - 具体分支、提交、PR 约定见 [CONTRIBUTING.md](./CONTRIBUTING.md)。
 
 ## License
