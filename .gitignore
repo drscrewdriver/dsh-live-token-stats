@@ -1,18 +1,16 @@
-# 依赖与产物
+# 依赖与产�?
 node_modules/
-lib/
-dist/
 
-# 内部私有文档，不对外不跟踪
+# 内部私有文档，不对外不跟�?
 .private/
 
-# 调试分析脚本为本地工具，不入库，含 export-tokenizer-data.mjs
+# 调试分析脚本为本地工具，不入库，�?export-tokenizer-data.mjs
 scripts/
 
 # 构建缓存
 *.tsbuildinfo
 
-# 日志与杂项
+# 日志与杂�?
 *.log
 .DS_Store
 Thumbs.db
