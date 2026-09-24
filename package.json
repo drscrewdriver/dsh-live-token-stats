@@ -1,6 +1,6 @@
 {
   "name": "dsh-live-token-stats",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "DSH Web 插件：基于 DeepSeek 官方 BPE 分词表，在 composer 下方实时渲染 token 状态带，显示流式 TPS、输出 token 与首字延迟，并对比上次 step 的估算与实际偏差；纯插件自包含，不改 DSH 源码",
   "keywords": [
     "deepseek-harness",
@@ -47,9 +47,27 @@
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run"
   },
+  "publishConfig": {
+    "tag": "dsh-0.1.7"
+  },
   "peerDependencies": {
     "@deepseek-ai/cordis": ">=4.0.0",
+    "@deepseek-ai/dsh-client-connection": ">=0.1.5-rc.1 <0.2.0-0",
+    "@deepseek-ai/dsh-client-runtime": ">=0.1.1-rc.2 <0.2.0-0",
+    "@deepseek-ai/dsh-client-ui-conversation": ">=0.1.5-rc.1 <0.2.0-0",
+    "@deepseek-ai/dsh-host-apiproxy": ">=0.1.1-rc.2 <0.2.0-0",
+    "@deepseek-ai/dsh-llm": ">=0.1.5-rc.1 <0.2.0-0",
+    "@deepseek-ai/dsh-session": ">=0.1.5-rc.1 <0.2.0-0",
+    "@deepseek-ai/dsh-session-projection": ">=0.1.5-rc.1 <0.2.0-0",
     "react": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-client-runtime": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-client-ui-conversation": {
+      "optional": true
+    }
   },
   "dependencies": {
     "@deepseek-ai/schemastery": ">=3.18.0",
@@ -90,7 +108,7 @@
   ],
   "engines": {
     "node": ">=22",
-    "dsh": ">=0.1.5-rc.2 <0.2.0-0"
+    "dsh": ">=0.1.5-rc.1 <0.2.0-0"
   },
   "license": "MIT"
 }
